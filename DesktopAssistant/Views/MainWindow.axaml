@@ -15,6 +15,13 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    <!-- <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
+    <Image Margin="20" Height="200" Width="600"
+        Source="{Binding _Frame}" />
+    <!-- <Rectangle Width="200" Height="300">
+        <Rectangle.Fill>
+            <ImageBrush Source="avares://DesktopAssistant/Assets/Spritesheet1.png"
+                    SourceRect="{Binding SourceRect}"/>
+        </Rectangle.Fill>
+    </Rectangle> -->
 </Window>

@@ -1,6 +1,51 @@
 ﻿namespace DesktopAssistant.ViewModels;
 
+using System;
+using System.Collections.Generic;
+using Avalonia;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Threading;
+
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    public Bitmap _bitmap { get; }
+    public List<CroppedBitmap> frames = new List<CroppedBitmap>();
+    private int currentFrame = 0;
+    public CroppedBitmap _Frame
+    {
+        get => frames[currentFrame];
+    }
+    private readonly DispatcherTimer _timer;
+    public MainWindowViewModel()
+    {
+        // Loads asset since it is saved as a URI
+        var uri = new Uri("avares://DesktopAssistant/Assets/Spritesheet1.png");
+        // Uses AssetLoader in order to open asset attached to stream, this deletes it quickly
+        using var stream = AssetLoader.Open(uri);
+        // Creates bitmap of opened asset
+        _bitmap = new Bitmap(stream);
+        
+        // Load the individual frames
+        for (int i = 0; i < 4; i++)
+        {
+            PixelRect rect = new PixelRect(i*56,0,56,88);
+            CroppedBitmap frame = new CroppedBitmap(_bitmap,rect);
+            frames.Add(frame);
+        }
+        
+        _timer = new DispatcherTimer
+        
+        {
+            Interval = TimeSpan.FromMilliseconds(200) // adjust speed
+        };
+        _timer.Tick += (_, _) => AdvanceFrame();
+        _timer.Start();
+    }
+
+    private void AdvanceFrame()
+    {
+        currentFrame = (currentFrame + 1) % frames.Count;
+        OnPropertyChanged(nameof(_Frame)); // Notify the view to redraw
+    }
 }
