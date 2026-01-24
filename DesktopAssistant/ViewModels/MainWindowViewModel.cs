@@ -1,15 +1,17 @@
-﻿namespace DesktopAssistant.ViewModels;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Avalonia;
+using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 
+namespace DesktopAssistant.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     public Bitmap _bitmap { get; }
+    public List<CroppedBitmap> idleAni = new List<CroppedBitmap>();
+    public List<CroppedBitmap> walkAni = new List<CroppedBitmap>();
     public List<CroppedBitmap> frames = new List<CroppedBitmap>();
     private int currentFrame = 0;
     public CroppedBitmap _Frame
@@ -29,10 +31,18 @@ public partial class MainWindowViewModel : ViewModelBase
         // Load the individual frames
         for (int i = 0; i < 4; i++)
         {
-            PixelRect rect = new PixelRect(i*56,0,56,88);
+            PixelRect rect = new PixelRect(i*56,1,56,72);
             CroppedBitmap frame = new CroppedBitmap(_bitmap,rect);
-            frames.Add(frame);
+            idleAni.Add(frame);
         }
+        for (int i = 0; i < 9; i++)
+        {
+            PixelRect rect = new PixelRect(i*56,97,56,72);
+            CroppedBitmap frame = new CroppedBitmap(_bitmap,rect);
+            walkAni.Add(frame);
+        }
+
+        frames = idleAni;
         
         _timer = new DispatcherTimer
         
@@ -47,5 +57,19 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         currentFrame = (currentFrame + 1) % frames.Count;
         OnPropertyChanged(nameof(_Frame)); // Notify the view to redraw
+    }
+
+    public void SwitchToIdle()
+    {
+        frames = idleAni;
+        currentFrame = 0;
+        OnPropertyChanged(nameof(_Frame));
+    }
+
+    public void SwitchToWalk()
+    {
+        frames = walkAni;
+        currentFrame = 0;
+        OnPropertyChanged(nameof(_Frame));
     }
 }

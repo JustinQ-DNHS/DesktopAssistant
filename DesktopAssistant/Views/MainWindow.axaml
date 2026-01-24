@@ -7,7 +7,9 @@
         x:Class="DesktopAssistant.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="DesktopAssistant">
+        Title="DesktopAssistant"
+        Width="200" Height="200"
+        SystemDecorations="None">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -17,7 +19,7 @@
 
     <!-- <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
     <Image Margin="20" Height="200" Width="600"
-        Source="{Binding _Frame}" />
+        Source="{Binding _Frame}" PointerPressed="PointerPressedHandler"/>
     <!-- <Rectangle Width="200" Height="300">
         <Rectangle.Fill>
             <ImageBrush Source="avares://DesktopAssistant/Assets/Spritesheet1.png"
